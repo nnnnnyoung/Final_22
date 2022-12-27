@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.groupone.dao.IF_boardDAO">
+
+	<!-- 게시판등록 -->
+	<insert id="boardinsert" parameterType="com.groupone.vo.BoardVO">
+		insert into boardcar values(bno_seq.nextval,#{rno},#{id},#{title},#{content},default,default,default)
+	</insert>
+	
+		<!-- 페이징을 위한 총 글 갯수 가져오기-->
+	<select id="countBoard" resultType="int">
+		select count(*) from boardcar 
+	</select>
+	
+		<!-- 게시글 전체 불러오기 -->
+	<select id="selectAll" resultType="com.groupone.vo.BoardVO">
+		select t.* from (select sub.*, rownum as rnum from(select *
+		from boardcar b
+		LEFT OUTER JOIN boardfile f
+		on b.bno=f.bno
+		order by b.bno desc) sub) t where rnum between #{startNo} and #{endNo}
+		
+	</select>
+	
+	<!-- 선택한 게시글 불러오기 -->
+	<select id="selectB" resultType="com.groupone.vo.BoardVO">
+	select * from boardcar where bno=#{bno}
+
+	</select>
+	
+	<!-- 조회수 증가  -->
+	<update id="plusCnt">
+		update boardcar set cnt=cnt+1 where bno=#{bno} 
+	</update>
+	
+	<!-- 선택한 게시글의 차 모델명 가져오기 -->	
+	<select id="selectCN" resultType="String">
+	select carname from rentcar where cno=(select reserv.cno 
+	from reserv
+	left outer join rentcar
+	on reserv.cno=rentcar.cno
+	where rno=#{rno})
+	</select>
+	
+	<!-- 선택한 글의 이미지 불러오기 -->
+	<select id="selectAttach" resultType="String">
+		select fname from boardfile where bno=#{bno} 
+	</select>
+	
+	<!-- 선택한 글의 댓글 불러오기 -->
+	<select id="selectCom" resultType="com.groupone.vo.CommentsVO">
+		select * from boardcomments where bno=#{bno} order by bbindate asc
+	</select>
+	
+	<!-- 댓글 작성 -->
+	<insert id="inputC" parameterType="com.groupone.vo.CommentsVO">
+		insert into boardcomments values(bbno_seq.nextval, #{bno} ,#{id} ,#{comments} ,default)
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="delCom" parameterType="String">
+		delete from boardcomments where bbno=#{bbno} 
+	</delete>
+	
+	<!-- 첨부파일 insert -->
+	<insert id="board_attach" parameterType="String">
+		insert into boardfile
+		values((select max(bno) from boardcar), #{filename})
+	</insert>
+	
+	<!-- 게시글 상세보기 -->
+	<select id="selectOne" resultType="com.groupone.vo.BoardVO">
+		select * from boardcar where
+		bno=#{vno}
+	</select>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="delBoard" parameterType="String">  
+		delete from boardcar where bno=#{bno}
+		
+	</delete>
+	
+	<!-- 수정할 게시글 불러오기 -->
+	<select id="modiB" parameterType="String" resultType="com.groupone.vo.BoardVO">
+	select * from boardcar b
+	left outer join boardfile f
+	on b.bno=f.bno
+	where b.bno=#{bno}
+	</select>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateB" parameterType="com.groupone.vo.BoardVO">	
+	update boardcar set title=#{title},content=#{content} where bno=#{bno}
+	</update>
+	
+	<!-- 게시글 파일 수정 -->
+	<update id="updateBfile" parameterType="com.groupone.vo.BoardVO">
+		<choose>
+			<when test='fname==null'>
+				update boardfile set fname=null where bno=#{bno}
+			</when>
+			<otherwise>
+				update boardfile set fname=#{fname} where bno=#{bno}
+			</otherwise>
+		</choose>
+
+	</update>
+	
+	<!-- 검색한 글 페이징을 위한 총 글 갯수 가져오기-->
+	<select id="countSh" resultType="int" parameterType="com.groupone.vo.BoardVO">
+		select count(*) from boardcar where ${search_option} like '%'||#{keyword}||'%'  
+	</select>
+	
+	<!-- 검색한 게시글 전체 불러오기 -->
+	<select id="selectSh" resultType="com.groupone.vo.BoardVO" parameterType="com.groupone.vo.BoardVO">
+		select t.* from (select sub.*, rownum as rnum from(select *
+		from boardcar b
+		LEFT OUTER JOIN boardfile f
+		on b.bno=f.bno
+		where ${search_option} like '%'||#{keyword}||'%' 
+		order by b.bno desc) sub) t where rnum between #{startNo} and #{endNo} 
+		
+	</select>
+	
+	<!-- 댓글 수정하기 -->
+	
+	<update id="modiC" parameterType="com.groupone.vo.CommentsVO">
+		update boardcomments set comments=#{comments} where bbno=#{bbno}
+	</update>
+	
+	
+	<!-- 게시글 상세보기 시 로그인한 id가 해당글에 좋아요를 눌렀는지 여부 확인 -->
+	<select id="countLike" parameterType="com.groupone.vo.GoodlistVO" resultType="int">
+		SELECT COUNT(*) FROM GOODLIST WHERE ID=#{id} AND BNO=#{bno}
+	</select>
+	
+	<!-- 좋아요 클릭 -->
+	<update id="updateG" parameterType="com.groupone.vo.GoodlistVO">
+		<choose>
+			<when test='heartval==0'>
+				update boardcar set good=good+1 where bno=#{bno}
+			</when>
+			
+			<otherwise>
+				update boardcar set good=good-1 where bno=#{bno}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!-- 좋아요 테이블에 좋아요 데이터 삽입 -->
+	<insert id="insertL" parameterType="com.groupone.vo.GoodlistVO">
+		INSERT INTO GOODLIST VALUES(#{bno}, #{id})	
+	</insert>
+	
+	
+	<!-- 좋아요 테이블에 좋아요 데이터 삭제 -->
+	<delete id="deleteL" parameterType="com.groupone.vo.GoodlistVO">
+		DELETE FROM GOODLIST WHERE ID=#{id} AND BNO=#{bno}
+	</delete>
+	
+	   <!-- 내정보보기 내가 작성한 최신 게시글 8개 가져오기 -->
+   <select id="selectId" resultType="com.groupone.vo.BoardVO">
+      <![CDATA[select * from(select * from boardcar where id=#{id} order by bno desc) where rownum<=8
+      ]]>
+   </select>
+   
+   <!--내정보보기 내가 작성한 최신 댓글 8개 가져오기 -->
+   <select id="selectComId" resultType="com.groupone.vo.CommentsVO">
+      <![CDATA[select * from(select * from boardcomments where id=#{id} order by bbindate desc) where rownum<=8
+      ]]>
+   </select>
+   
+   <!-- 내가 쓴 게시글 갯수 가져오기 -->
+   <select id="countBM" resultType="int" parameterType="string">
+      select count(*) from boardcar where id=#{id}
+   </select>
+   
+   <!-- 내가 쓴 글 가져오기 -->
+   <select id="selectML" resultType="com.groupone.vo.BoardVO" parameterType="com.groupone.vo.PageVO">
+
+      select * from (select sub.*, rownum as rnum from(select * from boardcar where id=#{id} order by bno desc) sub) where rnum between #{startNo} and #{endNo}
+   </select>
+   
+   <!-- 내가 쓴 댓글 수 가져오기 -->
+   <select id="countCM" resultType="int" parameterType="string">
+      select count(*) from boardcomments where id=#{id}
+   </select>
+   
+   
+   <!-- 내가 쓴 글 가져오기 -->
+   <select id="selectCL" resultType="com.groupone.vo.CommentsVO" parameterType="com.groupone.vo.PageVO">
+      select * from (select sub.*, rownum as rnum from(select * from boardcomments where id=#{id} order by bbindate desc) sub) where rnum between #{startNo} and #{endNo}
+      
+      
+   </select>
+   
+	
+</mapper>

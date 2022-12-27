@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.groupone.dao.IF_reserveDAO">
+
+	<insert id="reserveinsert" parameterType="com.groupone.vo.ReserveVO">
+		insert into reserv values(rno_seq.nextval,default,#{id},#{cno},#{licensetype},
+		#{licensenum},TO_DATE(#{rentdate},'YYYYMMDD HH24'),TO_DATE(#{returndate},'YYYYMMDD HH24'),#{insurance},#{sumpay},#{require},default)
+	</insert>
+	
+	<select id="selectlist" resultType="com.groupone.vo.ReserveVO">
+	<!-- 부등호 쿼리에는 CDATA 필요  -->
+		<![CDATA[
+		select * from reserv r
+		left outer join carmember c
+		on r.id=c.id
+		where r.returndate < to_char(sysdate, 'yyyymmdd') and r.id= #{id} and r.RECENTENT='n'
+		]]>
+
+	</select>
+	
+	
+	
+	<!-- 해당 회원 예약 리스트  -->
+	<select id="selectId" resultType="com.groupone.vo.ReserveVO">
+		select r.*,c.carname from reserv r, rentcar c where r.cno=c.cno and id=#{id}
+	</select>
+	
+	<select id="dateChk" resultType="com.groupone.vo.ReserveVO">
+		select * from reserv where cno=#{cno} and #{rentdate} between rentdate-1 and returndate
+	</select>
+	
+	<select id="reservOne" parameterType="int" resultType="com.groupone.vo.ReserveVO">
+		select * from reserv where rno=#{rno}
+	</select>
+	
+	<update id="updateR" parameterType="int">
+	
+		update reserv set RECENTENT='y' where rno=#{rno}
+	</update>
+</mapper>

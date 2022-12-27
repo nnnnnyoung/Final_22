@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.groupone.dao.IF_memberDAO">
+
+	<!-- 회원가입 -->
+	<insert id="memberinsert" parameterType="com.groupone.vo.MemberVO">
+		insert into carmember values(#{id},#{pass},#{name},#{tel},#{age},#{addr},#{gender},#{email},default)
+	</insert>
+	
+	<!-- 아이디하나 select -->
+	<select id="memberone" resultType="com.groupone.vo.MemberVO">
+		select * from carmember where id=#{id}
+	</select>
+	
+	<update id="memberMod">
+		update carmember set pass=#{pass}, name=#{name}, tel=#{tel}, age=#{age}, addr=#{addr}, gender=#{gender}, email=#{email} where id=#{id}
+	</update>
+	<delete id="memberDel">
+		delete from carmember where id=#{id}
+	</delete>
+	
+	<update id="delCoupon">
+		update carmember set coupon=null where id=#{id}
+	</update>
+</mapper>
