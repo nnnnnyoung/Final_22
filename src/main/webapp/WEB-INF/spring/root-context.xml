@@ -10,12 +10,12 @@
 		id="dataSource">
 		<property value="oracle.jdbc.driver.OracleDriver"
 			name="driverClassName" />
-		<property value="jdbc:oracle:thin:@localhost:1521:orcl"
+		<property value="jdbc:oracle:thin:@localhost:1521:xe"
 			name="url" />
 		<!-- 오라클 사용자 이름 -->
-		<property value="system" name="username" />
+		<property value="hr" name="username" />
 		<!-- 오라클 사용자 비밀번호 -->
-		<property value="11111111" name="password" />
+		<property value="hr" name="password" />
 	</bean>
 
 	<!-- mybatis 사용하기 위한 객체를 설정 이것은 스프링이 구동되면서 객체를 만들어서 컨테이너에 등록 시킬것이다. -->

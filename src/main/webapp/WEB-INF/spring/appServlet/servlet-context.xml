@@ -40,30 +40,11 @@
       <!-- <beans:constructor-arg value="c:\\tmp"></beans:constructor-arg> 로컬드라이버 -->
    </beans:bean>
 	
-	
-	<beans:bean id="Interceptor"
-		class="com.groupone.interceptor.Interceptor"></beans:bean>
-	<!-- 객체를 만들어 주세요.. 라는 설정입니다.. 이코드가 인터셉터 기능은 아닙니다.. -->
-	<!-- 인터셉터 설정 인터셉터에  적용될 컨트롤러를 매핑으로 설정 -->
-	<interceptors>
-		<interceptor>
-			<mapping path="/**"/><!-- /는 모든것../a/b/c -->
-			<!-- 인터셉터는 로그인과 관련된 컨트롤러 요청은 처리하면 안된다.. 제외시킨다. -->
-			<exclude-mapping path="/"/>	<!-- 이것은 제외하고 매핑하라 홈화면에 인터셉터가 안걸리게해줌 -->
-			<exclude-mapping path="/idchk"/>
-			<exclude-mapping path="/login**"/>
-			<exclude-mapping path="/logout**"/>
-			<exclude-mapping path="/resources/**"/>
-			<exclude-mapping path="/memberinsert"/>
-			<exclude-mapping path="/memberjoinview"/>
-			<beans:ref bean="Interceptor"/>
-		</interceptor>
-	</interceptors>
+
 	<context:component-scan base-package="com.groupone.controller"/>
 	<context:component-scan base-package="com.groupone.vo"/>
 	<context:component-scan base-package="com.groupone.dao"/>
 	<context:component-scan base-package="com.groupone.service"/>
-	<context:component-scan base-package="com.groupone.util"/> <!-- filedatautil 컨트롤러 지정했으니 해야지  -->
 	<annotation-driven>
       <message-converters>
          <beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">

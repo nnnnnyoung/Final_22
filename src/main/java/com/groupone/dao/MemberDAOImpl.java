@@ -1,5 +1,7 @@
 package com.groupone.dao;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -14,26 +16,33 @@ public class MemberDAOImpl implements IF_memberDAO {
 	
 	@Override
 	public void member_insert(MemberVO mvo) throws Exception {
-		sqlsession.insert(mapperQuery+".memberinsert", mvo);
+		sqlsession.insert(mapperQuery+".insert", mvo);
 	}
+
 	@Override
-	public MemberVO member_one(String id) throws Exception {
-		return sqlsession.selectOne(mapperQuery+".memberone", id);
-	}
-	@Override
-	public void member_mod(MemberVO mvo) throws Exception {
+	public List<MemberVO> member_select(MemberVO mvo) throws Exception {
 		// TODO Auto-generated method stub
-		sqlsession.update(mapperQuery+".memberMod", mvo);
+		return sqlsession.selectList(mapperQuery+".selectdate",mvo);
 	}
+
 	@Override
-	public void member_del(String id) throws Exception {
+	public int idchk(String id) throws Exception {
 		// TODO Auto-generated method stub
-		sqlsession.delete(mapperQuery+".memberDel",id);
+		return sqlsession.selectOne(mapperQuery+".idchk",id);
 	}
+
 	@Override
-	public void del_coupon(String id) throws Exception {
+	public void deleteM(String id) throws Exception {
 		// TODO Auto-generated method stub
-		sqlsession.update(mapperQuery+".delCoupon",id);
+		System.out.println(id+"진짜 확화홯ㄱ인");
+		sqlsession.delete(mapperQuery+".deleteM",id);
 	}
+
+	@Override
+	public void updateM(MemberVO mvo) throws Exception {
+		// TODO Auto-generated method stub
+		sqlsession.update(mapperQuery+".updateM",mvo);
+	}
+
 
 }

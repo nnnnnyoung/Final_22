@@ -4,24 +4,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.groupone.dao.IF_memberDAO">
 
-	<!-- 회원가입 -->
-	<insert id="memberinsert" parameterType="com.groupone.vo.MemberVO">
-		insert into carmember values(#{id},#{pass},#{name},#{tel},#{age},#{addr},#{gender},#{email},default)
+	
+	<insert id="insert" parameterType="com.groupone.vo.MemberVO">
+		insert into member values( #{id},#{name},#{gender},#{country},#{city},default)
 	</insert>
 	
-	<!-- 아이디하나 select -->
-	<select id="memberone" resultType="com.groupone.vo.MemberVO">
-		select * from carmember where id=#{id}
+	<select id="selectdate" resultType="com.groupone.vo.MemberVO" parameterType="com.groupone.vo.MemberVO">
+	<![CDATA[select * from member where indate>=#{startD} and indate<=#{endD}]]>
+	
 	</select>
 	
-	<update id="memberMod">
-		update carmember set pass=#{pass}, name=#{name}, tel=#{tel}, age=#{age}, addr=#{addr}, gender=#{gender}, email=#{email} where id=#{id}
-	</update>
-	<delete id="memberDel">
-		delete from carmember where id=#{id}
+	<select id="idchk" resultType="int"  parameterType="string">
+		select count(*) from member where id=#{id}
+	</select>
+	
+	<delete id="deleteM" parameterType="string">
+		delete from member where id=#{id}
 	</delete>
 	
-	<update id="delCoupon">
-		update carmember set coupon=null where id=#{id}
+	<update id="updateM" parameterType="com.groupone.vo.MemberVO">
+		update member set name=#{name},gender=#{gender},country=#{country},city=#{city} where id=#{id}
 	</update>
 </mapper>

@@ -1,38 +1,18 @@
 package com.groupone.vo;
 
 public class MemberVO {
-	String id; 
-	String pass;
-	String name;
-	String tel; 
-	String age;
-	String addr;
-	String gender;
-	String email;
-	String coupon;
-	public String getCoupon() {
-		return coupon;
-	}
-	public void setCoupon(String coupon) {
-		this.coupon = coupon;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	private String id; 
+	private String name;
+	private String gender; 
+	private String country;
+	private String city;
+	private String startD;
+	private String endD;
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	public String getPass() {
-		return pass;
-	}
-	public void setPass(String pass) {
-		this.pass = pass;
 	}
 	public String getName() {
 		return name;
@@ -40,28 +20,35 @@ public class MemberVO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getTel() {
-		return tel;
-	}
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
-	public String getAge() {
-		return age;
-	}
-	public void setAge(String age) {
-		this.age = age;
-	}
-	public String getAddr() {
-		return addr;
-	}
-	public void setAddr(String addr) {
-		this.addr = addr;
-	}
 	public String getGender() {
 		return gender;
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getStartD() {
+		return startD;
+	}
+	public void setStartD(String startD) {
+		this.startD = startD;
+	}
+	public String getEndD() {
+		return endD;
+	}
+	public void setEndD(String endD) {
+		this.endD = endD;
+	}
+
 }

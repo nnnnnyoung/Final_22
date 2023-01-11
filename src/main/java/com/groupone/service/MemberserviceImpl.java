@@ -1,5 +1,7 @@
 package com.groupone.service;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
@@ -15,23 +17,24 @@ public class MemberserviceImpl implements IF_memberservice{
 		memberdao.member_insert(mvo);
 	}
 	@Override
-	public MemberVO member_one(String id) throws Exception {
-		return memberdao.member_one(id);
+	public List<MemberVO> member_select(MemberVO mvo) throws Exception {
+		// TODO Auto-generated method stub
+		return memberdao.member_select(mvo);
 	}
 	@Override
-	public void member_mod(MemberVO mvo) throws Exception {
+	public int idchk(String id) throws Exception {
 		// TODO Auto-generated method stub
-		memberdao.member_mod(mvo);
+		return memberdao.idchk(id);
 	}
 	@Override
-	public void member_del(String id) throws Exception {
+	public void deleteM(String id) throws Exception {
 		// TODO Auto-generated method stub
-		memberdao.member_del(id);
+		memberdao.deleteM(id);
 	}
 	@Override
-	public void delCoupon(String id) throws Exception {
+	public void updateM(MemberVO mvo) throws Exception {
 		// TODO Auto-generated method stub
-		memberdao.del_coupon(id);
+		memberdao.updateM(mvo);
 	}
 
 }
